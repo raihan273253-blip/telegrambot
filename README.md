@@ -1,2 +1,1 @@
-# telegrambot
-Auto signsl in chanel
+# Lovely-chat-bot

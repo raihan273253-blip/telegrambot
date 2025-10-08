@@ -3,21 +3,22 @@ import requests
 import json
 import time
 import random
+import os
 from telegram.ext import Application, ContextTypes
 from telegram.error import TelegramError
 import asyncio
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
-TOKEN = "8449140264:AAHM-FjFPzEyXNFkcG_bJedUJ8WDFdlTFBo"
-CHANNEL_ID = "-1003040829067"
+TOKEN = os.getenv('TOKEN', "8449140264:AAHM-FjFPzEyXNFkcG_bJedUJ8WDFdlTFBo")
+CHANNEL_ID = os.getenv('CHANNEL_ID', "-1003040829067")
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 def load_state():
     try:
-        with open("/home/yourusername/mysite/last_prediction.json", "r") as f:
+        with open("/tmp/last_prediction.json", "r") as f:
             return json.load(f)
     except (FileNotFoundError, json.JSONDecodeError) as e:
         logger.error(f"Failed to load last_prediction.json: {e}")
@@ -25,7 +26,7 @@ def load_state():
 
 def save_state(state):
     try:
-        with open("/home/yourusername/mysite/last_prediction.json", "w") as f:
+        with open("/tmp/last_prediction.json", "w") as f:
             json.dump(state, f, indent=4)
         logger.info(f"Latest signal state saved: {state}")
     except IOError as e:
